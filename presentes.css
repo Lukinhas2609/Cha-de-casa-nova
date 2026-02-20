@@ -174,3 +174,24 @@ header h1{
   .lista-presentes{ gap: 14px; }
   .card-presente{ padding: 16px 14px 14px; }
 }
+.btn-group {
+    margin-top: 25px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 14px 35px;
+    background: transparent;
+    border: 1px solid #5b4b41;
+    color: #5b4b41;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background: #f2dfd3;
+    color: #5b4b41;
+}
