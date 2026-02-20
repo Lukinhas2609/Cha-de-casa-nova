@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>Chá de Panela 💍</title>
+  <link rel="stylesheet" href="confirmar.css">
+</head>
+
+<body>
+
+  <section class="hero">
+    <h1>Chá de Casa Nova 💕</h1>
+    <p>"Sim, coisas grandiosas fez o Senhor por nós, por isso estamos alegres.”</p>
+    <p class="versiculo">Salmos 126:3</p>
+  </section>
+
+  <section class="confirmacao">
+    <h2>Confirme sua Presença</h2>
+
+    <form id="form">
+      <div id="lista-pessoas">
+        <div class="pessoa">
+          <input type="text" placeholder="Nome">
+          <div class="erro"></div>
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button type="button" id="confirmar" class="btn">Confirmar Presença</button>
+        <a href="index.html" class="btn">Voltar</a>
+        <button type="button" id="adicionar" class="btn">Adicionar Pessoa</button>
+      </div>
+    </form>
+
+    <p id="status"></p>
+  </section>
+
+  <footer>
+    <p>Com carinho Emilly e Lukas 💕</p>
+  </footer>
+
+  <!-- ✅ 1) Biblioteca do Supabase primeiro -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- ✅ 2) Seu script depois (sem defer) -->
+  <script src="script.js"></script>
+
+</body>
+</html>

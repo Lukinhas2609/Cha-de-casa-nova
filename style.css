@@ -1,0 +1,152 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* HERO */
+.hero {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    background: radial-gradient(circle at top, #7a685d 0%, #5b4b41 60%, #3e342d 100%);
+    font-family: 'Montserrat', sans-serif;
+    overflow: hidden;
+}
+
+/* Overlay elegante */
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.25),
+        rgba(0, 0, 0, 0.55)
+    );
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 80px;
+}
+
+/* GLASS ULTRA PREMIUM */
+.glass {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+
+    border-radius: 36px;
+    padding: 70px;
+    text-align: left;
+    color: #ffffff;
+
+    max-width: 520px;
+    width: 100%;
+
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 
+        0 40px 80px rgba(0, 0, 0, 0.45),
+        inset 0 0 40px rgba(255, 255, 255, 0.05);
+
+    animation: fadeUp 1.4s ease forwards;
+}
+
+/* TÍTULOS */
+.glass h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.3rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    margin-bottom: 25px;
+}
+
+.nomes {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+
+.data {
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+    opacity: 0.85;
+    text-transform: uppercase;
+}
+
+.mensagem {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 45px;
+    font-weight: 300;
+}
+
+/* BOTÕES */
+.btn-group {
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-block;
+    padding: 15px 40px;
+    background: linear-gradient(135deg, #f2dfd3, #e5cfc2);
+    color: #5b4b41;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 50px;
+    letter-spacing: 1.5px;
+    transition: all 0.4s ease;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+
+.btn:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+}
+
+/* ANIMAÇÃO SUAVE */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(60px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== MOBILE PREMIUM ===== */
+@media (max-width: 768px) {
+
+    .overlay {
+        justify-content: center;
+        padding: 30px;
+        background: rgba(0, 0, 0, 0.55);
+    }
+
+    .glass {
+        text-align: center;
+        padding: 45px 30px;
+    }
+
+    .glass h1 {
+        font-size: 2.4rem;
+    }
+
+    .nomes {
+        font-size: 1.5rem;
+    }
+
+    .mensagem {
+        font-size: 1rem;
+    }
+
+    .btn-group {
+        justify-content: center;
+    }
+}
