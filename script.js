@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Presença confirmada com sucesso ❤️");
 
         // ✅ melhor para GitHub Pages (evita quebrar por causa do "/")
-        window.location.href = "./localizacao.html";
+        window.location.href = "localizacao.html";
       } catch (err) {
         console.error("Erro Supabase:", err);
         alert("Erro ao confirmar presença: " + (err?.message || "desconhecido"));
