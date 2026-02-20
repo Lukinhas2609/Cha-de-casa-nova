@@ -8,6 +8,7 @@ if (typeof supabase === "undefined") {
 
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
+// ===== CARREGAR + RENDER POR CATEGORIA =====
 async function carregarPresentes() {
   const container = document.getElementById("lista-presentes");
   if (!container) return;
@@ -19,8 +20,8 @@ async function carregarPresentes() {
     .order("nome_presente", { ascending: true });
 
   if (error) {
-    console.error(error);
-    container.innerHTML = "<p>Erro ao carregar presentes.</p>";
+    console.error("Erro ao carregar presentes:", error);
+    container.innerHTML = '<p style="color:white;text-align:center;">Erro ao carregar presentes.</p>';
     return;
   }
 
@@ -30,17 +31,20 @@ async function carregarPresentes() {
 function renderPresentes(container, presentes) {
   container.innerHTML = "";
 
+  if (!presentes || presentes.length === 0) {
+    container.innerHTML = '<p style="color:white;text-align:center;">Nenhum presente cadastrado.</p>';
+    return;
+  }
+
   // Agrupar por categoria
   const agrupado = {};
-  presentes.forEach(p => {
-    if (!agrupado[p.categoria]) {
-      agrupado[p.categoria] = [];
-    }
-    agrupado[p.categoria].push(p);
+  presentes.forEach((p) => {
+    const cat = (p.categoria || "Outros").trim();
+    if (!agrupado[cat]) agrupado[cat] = [];
+    agrupado[cat].push(p);
   });
 
-  Object.keys(agrupado).forEach(categoria => {
-
+  Object.keys(agrupado).forEach((categoria) => {
     const tituloCategoria = document.createElement("h2");
     tituloCategoria.className = "titulo-categoria";
     tituloCategoria.textContent = categoria;
@@ -49,8 +53,7 @@ function renderPresentes(container, presentes) {
     const grid = document.createElement("div");
     grid.className = "lista-presentes";
 
-    agrupado[categoria].forEach(p => {
-
+    agrupado[categoria].forEach((p) => {
       const card = document.createElement("div");
       card.className = "card-presente" + (p.disponivel ? "" : " reservado");
 
@@ -74,3 +77,56 @@ function renderPresentes(container, presentes) {
     container.appendChild(grid);
   });
 }
+
+// ===== RESERVAR PRESENTE =====
+async function reservarPresente(botao, card, nomePresente) {
+  const nomePessoa = prompt("Digite seu nome para reservar:");
+  if (!nomePessoa || nomePessoa.trim().length < 3) {
+    alert("Digite um nome válido.");
+    return;
+  }
+  if (!confirm("Deseja reservar este presente?")) return;
+
+  botao.disabled = true;
+  botao.textContent = "Reservando...";
+
+  try {
+    const { data, error } = await supabaseClient
+      .from("presentes")
+      .update({
+        nome_pessoa: nomePessoa.trim(),
+        disponivel: false,
+        reservado_em: new Date().toISOString(),
+      })
+      .eq("nome_presente", nomePresente)
+      .eq("disponivel", true)
+      .select("nome_presente, disponivel");
+
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      alert("Este presente já foi reservado.");
+      botao.textContent = "Reservado";
+      botao.disabled = true;
+      card.classList.add("reservado");
+      return;
+    }
+
+    card.classList.add("reservado");
+    botao.textContent = "Reservado";
+    botao.disabled = true;
+
+    alert("Presente reservado com sucesso ❤️");
+  } catch (error) {
+    console.error("Erro Supabase (completo):", error);
+    alert("Erro ao reservar presente: " + (error?.message || "desconhecido"));
+    botao.disabled = false;
+    botao.textContent = "Reservar";
+  }
+}
+
+// ===== INIT =====
+document.addEventListener("DOMContentLoaded", () => {
+  carregarPresentes();
+  setInterval(carregarPresentes, 10000);
+});
