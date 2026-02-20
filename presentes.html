@@ -8,29 +8,38 @@
 <link rel="stylesheet" href="presentes.css">
 </head>
 
-<body class="pagina-interna">
+  <h1>Lista de Presentes 🎁</h1>
 
-<div class="card">
-    <p class="mensagem-acolhedora">
-        Sua presença é muito importante!<br>
-        Escolha o presente que deseja trazer e faça parte desse momento especial.
-    </p>
+  <div class="lista-presentes">
 
-    <section class="lista-presentes">
-        <div class="card-presente">
-            <img src="liquidificador.jpg" alt="Liquidificador">
-            <h3>Liquidificador</h3>
-            <button class="btn-reservar" data-presente="Liquidificador">Reservar</button>
-        </div>
-    </section>
-
-    <div class="btn-group">
-        <a href="index.html" class="btn">Voltar</a>
+    <div class="presente">
+      <h3>Jogo de pratos</h3>
+      <button class="btn-reservar" data-presente="Jogo de pratos">
+        Reservar
+      </button>
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="presentes.js"></script>
+    <div class="presente">
+      <h3>Panela de pressão</h3>
+      <button class="btn-reservar" data-presente="Panela de pressão">
+        Reservar
+      </button>
+    </div>
+
+    <div class="presente">
+      <h3>Jarra de vidro</h3>
+      <button class="btn-reservar" data-presente="Jarra de vidro">
+        Reservar
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Supabase primeiro -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Seu JS depois -->
+  <script src="presentes.js"></script>
 
 </body>
 </html>
