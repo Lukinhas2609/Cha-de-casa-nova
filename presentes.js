@@ -26,7 +26,6 @@ function renderPresentes(listaEl, presentes) {
 
     const botao = document.createElement("button");
     botao.className = "btn-reservar";
-    botao.dataset.presente = p.nome_presente;
 
     if (p.disponivel) {
       botao.textContent = "Reservar";
@@ -97,7 +96,6 @@ async function reservarPresente(botao, card, nomePresente) {
       return;
     }
 
-    // Atualiza UI do card
     card.classList.add("reservado");
     botao.textContent = `Reservado (${data[0].nome_pessoa})`;
     botao.disabled = true;
@@ -114,7 +112,5 @@ async function reservarPresente(botao, card, nomePresente) {
 // ===== INIT =====
 document.addEventListener("DOMContentLoaded", () => {
   carregarPresentes();
-
-  // opcional: recarrega a lista a cada 10s pra refletir reservas de outras pessoas
   setInterval(carregarPresentes, 10000);
 });
