@@ -21,8 +21,15 @@ function renderPresentes(listaEl, presentes) {
     const card = document.createElement("div");
     card.className = "card-presente" + (p.disponivel ? "" : " reservado");
 
-    const titulo = document.createElement("h3");
-    titulo.textContent = p.nome_presente;
+if (p.imagem_url) {
+  const img = document.createElement("img");
+  img.src = p.imagem_url;
+  img.alt = p.nome_presente;
+  card.appendChild(img);
+}
+
+const titulo = document.createElement("h3");
+titulo.textContent = p.nome_presente;
 
     const botao = document.createElement("button");
     botao.className = "btn-reservar";
@@ -51,7 +58,7 @@ async function carregarPresentes() {
 
   const { data, error } = await supabaseClient
     .from("presentes")
-    .select("nome_presente, disponivel, nome_pessoa")
+    .select("nome_presente, disponivel, categoria, imagem_url")
     .order("nome_presente", { ascending: true });
 
   if (error) {
