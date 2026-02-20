@@ -8,109 +8,69 @@ if (typeof supabase === "undefined") {
 
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-// ===== RENDER =====
-function renderPresentes(listaEl, presentes) {
-  listaEl.innerHTML = "";
-
-  if (!presentes || presentes.length === 0) {
-    listaEl.innerHTML = `<p style="color:white;text-align:center;">Nenhum presente cadastrado.</p>`;
-    return;
-  }
-
-  presentes.forEach((p) => {
-    const card = document.createElement("div");
-    card.className = "card-presente" + (p.disponivel ? "" : " reservado");
-
-    const titulo = document.createElement("h3");
-    titulo.textContent = p.nome_presente;
-
-    const botao = document.createElement("button");
-    botao.className = "btn-reservar";
-
-if (p.disponivel) {
-  botao.textContent = "Reservar";
-  botao.disabled = false;
-} else {
-  botao.textContent = "Reservado";
-  botao.disabled = true;
-}
-
-    botao.addEventListener("click", async () => {
-      await reservarPresente(botao, card, p.nome_presente);
-    });
-
-    card.appendChild(titulo);
-    card.appendChild(botao);
-    listaEl.appendChild(card);
-  });
-}
-
 async function carregarPresentes() {
-  const listaEl = document.getElementById("lista-presentes");
-  if (!listaEl) return;
+  const container = document.getElementById("lista-presentes");
+  if (!container) return;
 
   const { data, error } = await supabaseClient
     .from("presentes")
-    .select("nome_presente, disponivel, nome_pessoa")
+    .select("nome_presente, disponivel, categoria")
+    .order("categoria", { ascending: true })
     .order("nome_presente", { ascending: true });
 
   if (error) {
-    console.error("Erro ao carregar presentes:", error);
-    listaEl.innerHTML = `<p style="color:white;text-align:center;">Erro ao carregar presentes.</p>`;
+    console.error(error);
+    container.innerHTML = "<p>Erro ao carregar presentes.</p>";
     return;
   }
 
-  renderPresentes(listaEl, data);
+  renderPresentes(container, data);
 }
 
-async function reservarPresente(botao, card, nomePresente) {
-  const nomePessoa = prompt("Digite seu nome para reservar:");
-  if (!nomePessoa || nomePessoa.trim().length < 3) {
-    alert("Digite um nome válido.");
-    return;
-  }
-  if (!confirm("Deseja reservar este presente?")) return;
+function renderPresentes(container, presentes) {
+  container.innerHTML = "";
 
-  botao.disabled = true;
-  botao.textContent = "Reservando...";
-
-  try {
-    const { data, error } = await supabaseClient
-      .from("presentes")
-      .update({
-        nome_pessoa: nomePessoa.trim(),
-        disponivel: false,
-        reservado_em: new Date().toISOString(),
-      })
-      .eq("nome_presente", nomePresente)
-      .eq("disponivel", true)
-      .select("nome_presente, disponivel");
-
-    if (error) throw error;
-
-    if (!data || data.length === 0) {
-      alert("Este presente já foi reservado.");
-      botao.textContent = "Reservado";
-      botao.disabled = true;
-      card.classList.add("reservado");
-      return;
+  // Agrupar por categoria
+  const agrupado = {};
+  presentes.forEach(p => {
+    if (!agrupado[p.categoria]) {
+      agrupado[p.categoria] = [];
     }
+    agrupado[p.categoria].push(p);
+  });
 
-    card.classList.add("reservado");
-   botao.textContent = "Reservado";
-    botao.disabled = true;
+  Object.keys(agrupado).forEach(categoria => {
 
-    alert("Presente reservado com sucesso ❤️");
-  } catch (error) {
-    console.error("Erro Supabase (completo):", error);
-    alert("Erro ao reservar presente: " + (error?.message || "desconhecido"));
-    botao.disabled = false;
-    botao.textContent = "Reservar";
-  }
+    const tituloCategoria = document.createElement("h2");
+    tituloCategoria.className = "titulo-categoria";
+    tituloCategoria.textContent = categoria;
+    container.appendChild(tituloCategoria);
+
+    const grid = document.createElement("div");
+    grid.className = "lista-presentes";
+
+    agrupado[categoria].forEach(p => {
+
+      const card = document.createElement("div");
+      card.className = "card-presente" + (p.disponivel ? "" : " reservado");
+
+      const titulo = document.createElement("h3");
+      titulo.textContent = p.nome_presente;
+
+      const botao = document.createElement("button");
+      botao.className = "btn-reservar";
+      botao.textContent = p.disponivel ? "Reservar" : "Reservado";
+      botao.disabled = !p.disponivel;
+
+      botao.addEventListener("click", async () => {
+        await reservarPresente(botao, card, p.nome_presente);
+      });
+
+      card.appendChild(titulo);
+      card.appendChild(botao);
+      grid.appendChild(card);
+    });
+
+    container.appendChild(grid);
+  });
 }
-
-// ===== INIT =====
-document.addEventListener("DOMContentLoaded", () => {
-  carregarPresentes();
-  setInterval(carregarPresentes, 10000);
-});

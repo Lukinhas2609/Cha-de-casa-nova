@@ -195,3 +195,11 @@ header h1{
     background: #f2dfd3;
     color: #5b4b41;
 }
+.titulo-categoria {
+  margin: 40px 20px 10px;
+  font-size: 26px;
+  font-family: 'Playfair Display', serif;
+  color: white;
+  border-left: 6px solid #ff6f61;
+  padding-left: 12px;
+}
