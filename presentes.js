@@ -1,3 +1,6 @@
+// ===== SUPABASE =====
+const supabaseUrl = "https://iykaixanyshtbfolqvtr.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5a2FpeGFueXNodGJmb2xxdnRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2MTE2MzgsImV4cCI6MjA4NzE4NzYzOH0.VgbIzMwyaIwFzWxW3VrLpvsysP__Bq6pj_g7zP5lHwU";
 if (typeof supabase === "undefined") {
   console.error("Supabase não carregou! Confira a ordem dos scripts no HTML.");
 }
