@@ -8,6 +8,36 @@ if (typeof supabase === "undefined") {
 
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
+// ===== CONFIG STORAGE (bucket public) =====
+const bucketName = "presentes";
+const publicBucketBase = `${supabaseUrl}/storage/v1/object/public/${bucketName}/`;
+
+// Se quiser uma imagem padrão (opcional). Pode ser um arquivo do seu projeto.
+const fallbackImg = "./img/sem-foto.jpg";
+
+// Monta URL final da imagem.
+// Aceita:
+// - URL completa (https://...)
+// - caminho "presentes/arquivo.jpg"
+// - somente "arquivo.jpg"
+function resolveImagemUrl(imagemUrl) {
+  if (!imagemUrl) return null;
+
+  const val = String(imagemUrl).trim();
+  if (!val) return null;
+
+  // já é URL completa
+  if (/^https?:\/\//i.test(val)) return val;
+
+  // veio "presentes/arquivo.jpg"
+  if (val.startsWith(`${bucketName}/`)) {
+    return publicBucketBase + encodeURI(val.slice(bucketName.length + 1));
+  }
+
+  // veio só "arquivo.jpg"
+  return publicBucketBase + encodeURI(val);
+}
+
 // ===== RENDER =====
 function renderPresentes(listaEl, presentes) {
   listaEl.innerHTML = "";
@@ -21,26 +51,41 @@ function renderPresentes(listaEl, presentes) {
     const card = document.createElement("div");
     card.className = "card-presente" + (p.disponivel ? "" : " reservado");
 
-if (p.imagem_url) {
-  const img = document.createElement("img");
-  img.src = p.imagem_url;
-  img.alt = p.nome_presente;
-  card.appendChild(img);
-}
+    // IMAGEM
+    const finalImgUrl = resolveImagemUrl(p.imagem_url);
 
-const titulo = document.createElement("h3");
-titulo.textContent = p.nome_presente;
+    if (finalImgUrl) {
+      const img = document.createElement("img");
+      img.src = finalImgUrl;
+      img.alt = p.nome_presente;
+
+      img.addEventListener("error", () => {
+        console.warn("Imagem não carregou:", {
+          nome_presente: p.nome_presente,
+          imagem_url_db: p.imagem_url,
+          imagem_url_final: finalImgUrl,
+        });
+
+        // fallback (opcional)
+        img.src = fallbackImg;
+      });
+
+      card.appendChild(img);
+    }
+
+    const titulo = document.createElement("h3");
+    titulo.textContent = p.nome_presente;
 
     const botao = document.createElement("button");
     botao.className = "btn-reservar";
 
-if (p.disponivel) {
-  botao.textContent = "Reservar";
-  botao.disabled = false;
-} else {
-  botao.textContent = "Reservado";
-  botao.disabled = true;
-}
+    if (p.disponivel) {
+      botao.textContent = "Reservar";
+      botao.disabled = false;
+    } else {
+      botao.textContent = "Reservado";
+      botao.disabled = true;
+    }
 
     botao.addEventListener("click", async () => {
       await reservarPresente(botao, card, p.nome_presente);
@@ -70,6 +115,7 @@ async function carregarPresentes() {
   renderPresentes(listaEl, data);
 }
 
+// ===== RESERVAR =====
 async function reservarPresente(botao, card, nomePresente) {
   const nomePessoa = prompt("Digite seu nome para reservar:");
   if (!nomePessoa || nomePessoa.trim().length < 3) {
@@ -104,7 +150,7 @@ async function reservarPresente(botao, card, nomePresente) {
     }
 
     card.classList.add("reservado");
-   botao.textContent = "Reservado";
+    botao.textContent = "Reservado";
     botao.disabled = true;
 
     alert("Presente reservado com sucesso ❤️");
