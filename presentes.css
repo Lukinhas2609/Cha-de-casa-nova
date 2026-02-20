@@ -1,140 +1,176 @@
-/* Base */
-* {
-  box-sizing: border-box;
+/* ===== Reset / Base ===== */
+* { box-sizing: border-box; }
+
+:root{
+  --bg: #3f352f;
+  --card: rgba(255,255,255,.92);
+  --text: #1f1f1f;
+  --muted: rgba(255,255,255,.85);
+  --accent: #ff6f61;
+  --accent-2: #f2dfd3;
+  --shadow: 0 18px 40px rgba(0,0,0,.22);
+  --shadow-soft: 0 10px 25px rgba(0,0,0,.14);
+  --radius: 18px;
 }
 
-body {
+body{
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: #f5f5f5;
-  position: relative;
   min-height: 100vh;
+  font-family: "Montserrat", Arial, Helvetica, sans-serif;
+  color: var(--text);
+  background: var(--bg);
 }
 
-/* Camada escura no fundo */
-body::before {
-  content: "";
+/* Fundo com textura/gradiente leve */
+body::before{
+  content:"";
   position: fixed;
   inset: 0;
-  background: #5b4b41;
   z-index: -1;
+  background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(255,255,255,.12), transparent 55%),
+    radial-gradient(900px 500px at 10% 10%, rgba(255,111,97,.12), transparent 60%),
+    linear-gradient(180deg, #4a3e37 0%, #3b322d 55%, #332b27 100%);
 }
 
-/* Header */
-header {
+/* ===== Header ===== */
+header{
+  padding: 44px 18px 22px;
   text-align: center;
-  padding: 40px 20px;
-  background-color: #ff6f61;
-  color: white;
 }
 
-header h1 {
+header h1{
   margin: 0;
-  font-size: 32px;
-}
-
-/* Texto abaixo do header */
-.mensagem-acolhedora {
-  text-align: center;
-  font-size: 18px;
-  margin: 20px 20px 0;
-  font-family: "Georgia", serif;
-  font-style: italic;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(28px, 4vw, 44px);
+  letter-spacing: .3px;
   color: #fff;
-  opacity: 0.95;
+  text-shadow: 0 10px 22px rgba(0,0,0,.22);
 }
 
-/* Grid de cards */
-.lista-presentes {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
-  padding: 40px;
-  max-width: 1100px;
+/* ===== Subtexto ===== */
+.mensagem-acolhedora{
   margin: 0 auto;
-}
-
-/* Card */
-.card-presente {
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(8px);
-  border-radius: 18px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
+  padding: 10px 18px 0;
+  max-width: 980px;
   text-align: center;
-  padding: 18px 16px 20px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card-presente:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
-}
-
-/* Imagem (se você usar) */
-.card-presente img {
-  width: 120px;         /* estilo “ícone” */
-  height: 120px;
-  object-fit: cover;
-  margin: 10px auto 0;
-  display: block;
-  border-radius: 12px;
-}
-
-/* Título do presente */
-.card-presente h3 {
-  margin: 16px 0 14px;
+  font-family: "Playfair Display", serif;
+  font-style: italic;
   font-size: 18px;
-  color: #2b2b2b;
+  color: var(--muted);
 }
 
-/* Botão reservar */
-.card-presente .btn-reservar,
-.card-presente button {
-  background-color: #f2dfd3;
-  color: #000;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 10px;
+/* ===== Grid ===== */
+.lista-presentes{
+  max-width: 1100px;
+  margin: 26px auto 60px;
+  padding: 0 18px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+}
+
+/* ===== Card ===== */
+.card-presente{
+  background: var(--card);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  padding: 18px 16px 16px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease, filter .25s ease;
+  border: 1px solid rgba(255,255,255,.45);
+}
+
+.card-presente::before{
+  content:"";
+  position:absolute;
+  inset: -2px -2px auto -2px;
+  height: 90px;
+  background: linear-gradient(90deg, rgba(255,111,97,.18), rgba(242,223,211,.18));
+  filter: blur(0);
+}
+
+.card-presente:hover{
+  transform: translateY(-6px);
+  box-shadow: var(--shadow);
+}
+
+/* Título */
+.card-presente h3{
+  margin: 10px 0 14px;
+  position: relative;
+  font-size: 16px;
+  font-weight: 600;
+  color: #242424;
+}
+
+/* (Opcional) Se você for usar imagem no futuro */
+.card-presente img{
+  width: 110px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 14px;
+  display: block;
+  margin: 12px auto 10px;
+  box-shadow: 0 10px 20px rgba(0,0,0,.12);
+  position: relative;
+}
+
+/* ===== Botão ===== */
+.btn-reservar{
+  width: 100%;
+  border: 0;
+  padding: 12px 14px;
+  border-radius: 12px;
   cursor: pointer;
-  font-weight: bold;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  font-weight: 700;
+  letter-spacing: .2px;
+  background: var(--accent-2);
+  color: #151515;
+  transition: transform .18s ease, opacity .18s ease, filter .18s ease;
+  position: relative;
 }
 
-.card-presente .btn-reservar:hover,
-.card-presente button:hover {
-  transform: scale(1.03);
+.btn-reservar:hover{
+  transform: scale(1.02);
+  filter: brightness(0.98);
 }
 
-.card-presente .btn-reservar:disabled,
-.card-presente button:disabled {
+.btn-reservar:active{
+  transform: scale(0.99);
+}
+
+/* ===== Estado Reservado ===== */
+.card-presente.reservado{
+  opacity: .72;
+  filter: grayscale(.15);
+}
+
+.card-presente.reservado .btn-reservar{
+  background: #141414;
+  color: #fff;
   cursor: not-allowed;
-  opacity: 0.8;
 }
 
-/* Estado reservado */
-.card-presente.reservado {
-  opacity: 0.65;
+.card-presente.reservado .btn-reservar:hover{
+  transform: none;
+  filter: none;
 }
 
-.card-presente.reservado .btn-reservar,
-.card-presente.reservado button {
-  background-color: #111 !important;
-  color: #fff !important;
+/* ===== Mensagem quando lista vazia/erro (se você usar) ===== */
+.lista-presentes > p{
+  grid-column: 1 / -1;
+  text-align: center;
+  color: rgba(255,255,255,.9);
+  margin: 14px 0 0;
 }
 
-/* Responsivo */
-@media (max-width: 480px) {
-  header h1 {
-    font-size: 26px;
-  }
-
-  .lista-presentes {
-    padding: 22px;
-    gap: 14px;
-  }
-
-  .mensagem-acolhedora {
-    font-size: 16px;
-  }
+/* ===== Responsivo ===== */
+@media (max-width: 520px){
+  .mensagem-acolhedora{ font-size: 16px; }
+  .lista-presentes{ gap: 14px; }
+  .card-presente{ padding: 16px 14px 14px; }
 }
