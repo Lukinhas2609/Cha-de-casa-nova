@@ -27,13 +27,13 @@ function renderPresentes(listaEl, presentes) {
     const botao = document.createElement("button");
     botao.className = "btn-reservar";
 
-    if (p.disponivel) {
-      botao.textContent = "Reservar";
-      botao.disabled = false;
-    } else {
-      botao.textContent = p.nome_pessoa ? `Reservado (${p.nome_pessoa})` : "Reservado";
-      botao.disabled = true;
-    }
+if (p.disponivel) {
+  botao.textContent = "Reservar";
+  botao.disabled = false;
+} else {
+  botao.textContent = "Reservado";
+  botao.disabled = true;
+}
 
     botao.addEventListener("click", async () => {
       await reservarPresente(botao, card, p.nome_presente);
@@ -84,7 +84,7 @@ async function reservarPresente(botao, card, nomePresente) {
       })
       .eq("nome_presente", nomePresente)
       .eq("disponivel", true)
-      .select("nome_presente, disponivel, nome_pessoa");
+      .select("nome_presente, disponivel");
 
     if (error) throw error;
 
@@ -97,7 +97,7 @@ async function reservarPresente(botao, card, nomePresente) {
     }
 
     card.classList.add("reservado");
-    botao.textContent = `Reservado (${data[0].nome_pessoa})`;
+   botao.textContent = "Reservado";
     botao.disabled = true;
 
     alert("Presente reservado com sucesso ❤️");
