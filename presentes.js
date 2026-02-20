@@ -8,77 +8,61 @@ if (typeof supabase === "undefined") {
 
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-// ===== CARREGAR + RENDER POR CATEGORIA =====
+// ===== RENDER =====
+function renderPresentes(listaEl, presentes) {
+  listaEl.innerHTML = "";
+
+  if (!presentes || presentes.length === 0) {
+    listaEl.innerHTML = `<p style="color:white;text-align:center;">Nenhum presente cadastrado.</p>`;
+    return;
+  }
+
+  presentes.forEach((p) => {
+    const card = document.createElement("div");
+    card.className = "card-presente" + (p.disponivel ? "" : " reservado");
+
+    const titulo = document.createElement("h3");
+    titulo.textContent = p.nome_presente;
+
+    const botao = document.createElement("button");
+    botao.className = "btn-reservar";
+
+if (p.disponivel) {
+  botao.textContent = "Reservar";
+  botao.disabled = false;
+} else {
+  botao.textContent = "Reservado";
+  botao.disabled = true;
+}
+
+    botao.addEventListener("click", async () => {
+      await reservarPresente(botao, card, p.nome_presente);
+    });
+
+    card.appendChild(titulo);
+    card.appendChild(botao);
+    listaEl.appendChild(card);
+  });
+}
+
 async function carregarPresentes() {
-  const container = document.getElementById("lista-presentes");
-  if (!container) return;
+  const listaEl = document.getElementById("lista-presentes");
+  if (!listaEl) return;
 
   const { data, error } = await supabaseClient
     .from("presentes")
-    .select("nome_presente, disponivel, categoria")
-    .order("categoria", { ascending: true })
+    .select("nome_presente, disponivel, nome_pessoa")
     .order("nome_presente", { ascending: true });
 
   if (error) {
     console.error("Erro ao carregar presentes:", error);
-    container.innerHTML = '<p style="color:white;text-align:center;">Erro ao carregar presentes.</p>';
+    listaEl.innerHTML = `<p style="color:white;text-align:center;">Erro ao carregar presentes.</p>`;
     return;
   }
 
-  renderPresentes(container, data);
+  renderPresentes(listaEl, data);
 }
 
-function renderPresentes(container, presentes) {
-  container.innerHTML = "";
-
-  if (!presentes || presentes.length === 0) {
-    container.innerHTML = '<p style="color:white;text-align:center;">Nenhum presente cadastrado.</p>';
-    return;
-  }
-
-  // Agrupar por categoria
-  const agrupado = {};
-  presentes.forEach((p) => {
-    const cat = (p.categoria || "Outros").trim();
-    if (!agrupado[cat]) agrupado[cat] = [];
-    agrupado[cat].push(p);
-  });
-
-  Object.keys(agrupado).forEach((categoria) => {
-    const tituloCategoria = document.createElement("h2");
-    tituloCategoria.className = "titulo-categoria";
-    tituloCategoria.textContent = categoria;
-    container.appendChild(tituloCategoria);
-
-    const grid = document.createElement("div");
-    grid.className = "lista-presentes";
-
-    agrupado[categoria].forEach((p) => {
-      const card = document.createElement("div");
-      card.className = "card-presente" + (p.disponivel ? "" : " reservado");
-
-      const titulo = document.createElement("h3");
-      titulo.textContent = p.nome_presente;
-
-      const botao = document.createElement("button");
-      botao.className = "btn-reservar";
-      botao.textContent = p.disponivel ? "Reservar" : "Reservado";
-      botao.disabled = !p.disponivel;
-
-      botao.addEventListener("click", async () => {
-        await reservarPresente(botao, card, p.nome_presente);
-      });
-
-      card.appendChild(titulo);
-      card.appendChild(botao);
-      grid.appendChild(card);
-    });
-
-    container.appendChild(grid);
-  });
-}
-
-// ===== RESERVAR PRESENTE =====
 async function reservarPresente(botao, card, nomePresente) {
   const nomePessoa = prompt("Digite seu nome para reservar:");
   if (!nomePessoa || nomePessoa.trim().length < 3) {
@@ -113,7 +97,7 @@ async function reservarPresente(botao, card, nomePresente) {
     }
 
     card.classList.add("reservado");
-    botao.textContent = "Reservado";
+   botao.textContent = "Reservado";
     botao.disabled = true;
 
     alert("Presente reservado com sucesso ❤️");
