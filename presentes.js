@@ -73,3 +73,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 });
+const { data, error } = await supabaseClient
+  .from("presentes")
+  .update({
+    nome_pessoa: nomePessoa.trim(),
+    disponivel: false,
+    reservado_em: new Date().toISOString()
+  })
+  .eq("nome_presente", nomePresente)
+  .eq("disponivel", true)
+  .select();
