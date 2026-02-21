@@ -213,15 +213,14 @@ header h1{
 
   /* imagem grande e proporcional */
 .card-presente img {
-  width: 100% !important;
-  aspect-ratio: 1 / 1 !important;
-  height: auto !important;
-  object-fit: cover !important;
-  border-radius: 14px !important;
-  margin: 0 0 12px 0 !important;
-  display: block !important;
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  background: linear-gradient(180deg, #f8f8f8, #efefef);
+  padding: 15px;
+  border-radius: 16px;
+  margin-bottom: 14px;
 }
-
   /* título e botão mais confortáveis */
   .card-presente h3 {
     font-size: 16px !important;
