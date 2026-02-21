@@ -212,14 +212,15 @@ header h1{
   }
 
   /* imagem grande e proporcional */
-  .card-presente img {
-    width: 100% !important;
-    height: 180px !important;       /* pode mudar pra 160 se quiser menor */
-    object-fit: cover !important;
-    border-radius: 14px !important;
-    margin: 0 0 12px 0 !important;  /* remove auto que quebra alinhamento */
-    display: block !important;
-  }
+.card-presente img {
+  width: 100% !important;
+  aspect-ratio: 1 / 1 !important;
+  height: auto !important;
+  object-fit: cover !important;
+  border-radius: 14px !important;
+  margin: 0 0 12px 0 !important;
+  display: block !important;
+}
 
   /* título e botão mais confortáveis */
   .card-presente h3 {
